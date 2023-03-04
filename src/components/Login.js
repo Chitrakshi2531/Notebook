@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Form, Button,Input} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-//import {useHistory} from 'react-router-dom';
+import { WithRouter } from './Navigation';
 
 class Login extends Component {
   
@@ -11,7 +11,6 @@ class Login extends Component {
       email: null,
       password: null,
     };
-  //  let history = useHistory();
   }
   onInputChange = (event) => {
     event.preventDefault();
@@ -24,14 +23,14 @@ class Login extends Component {
     const res = await fetch("",{
       method: "POST",
       headers: {
-        'Content-Type': 'application.json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({email: [this.state.email],password: [this.state.password]})
     });
-    const json = await Response.json()
+    const json = await res.json()
     console.log(json);
     if(json.success){
-    //  history.push("/")
+      this.props.navigate('/login')
     }
     else{
       alert("Invalid crendential");
@@ -107,4 +106,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default WithRouter(Login);
