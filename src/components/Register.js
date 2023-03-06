@@ -1,16 +1,6 @@
 import React, { Component } from 'react';
-import {Form, Button, Input, Select} from 'antd';
-const { Option } = Select;
-//import {useHistory} from 'react-router-dom';
-
-const prefixSelector = (
-  <Form.Item name="prefix" noStyle>
-    <Select style={{ width: 70 }}>
-      <Option value="91">+91</Option>
-      <Option value="87">+87</Option>
-    </Select>
-  </Form.Item>
-);
+import {Form, Button, Input, message} from 'antd';
+import { WithRouter } from './Router';
 
 
 class Register extends Component {
@@ -23,7 +13,6 @@ class Register extends Component {
       password: null,
       confirm_password: null,
     };
-    //let history = useHistory();
   }
   onInputChange = (event) => {
     this.setState(
@@ -35,17 +24,11 @@ class Register extends Component {
       alert('Password did not matched');
     }
     else{
-      //event.preventDefault();
-      console.log({
-        "name": this.state.name,
-          "email": this.state.email,
-          "phone": this.state.phone,
-          "password": this.state.password,
-      });
-      const res = await fetch("http://localhost:3001/register",{
+      event.preventDefault();
+      const res = await fetch("http://localhost:3001/auth/register",{
         method: "POST",
         headers: {
-          'Content-Type': 'application.json'
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           "name": this.state.name,
@@ -54,17 +37,28 @@ class Register extends Component {
           "password": this.state.password,
         })
       });
-      const json = await Response.json()
+      
+      const json = await res.json()
       console.log(json);
       if(json.success){
-       // history.push("/")
-       console.log("added details to db");
+       message.success("Account created");
+       this.props.navigate('/login');
+      }
+      else if(res.status === 400){
+        json.errors.forEach(element => {
+          message.error(element.msg);
+        });
+      }
+      else if(res.status === 401)
+      {
+        message.error('Account already exist')
       }
       else{
-        alert("Invalid crendential");
-    }
+        message.error("Internal server error");
+      }
     }
   }
+   
   render() {
     return (
       <div className='formContainer'>
@@ -121,7 +115,6 @@ class Register extends Component {
           rules={[{ required: true, message: 'Please input your phone number!' }]}
         >
           <Input 
-            addonBefore={prefixSelector} 
             style={{ width: '100%' }} 
             name='phone'
               value = {this.state.phone}
@@ -176,4 +169,4 @@ class Register extends Component {
   }
 }
 
-export default Register;
+export default WithRouter(Register);
