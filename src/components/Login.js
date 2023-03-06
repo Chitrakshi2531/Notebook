@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Form, Button,Input} from 'antd';
+import {Form, Button, Input, message} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { WithRouter } from './Navigation';
 
@@ -20,7 +20,7 @@ class Login extends Component {
   }
   onFinish = async (event) => {
     event.preventDefault();
-    const res = await fetch("",{
+    const res = await fetch("http://localhost:3001/auth/login",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -29,12 +29,23 @@ class Login extends Component {
     });
     const json = await res.json()
     console.log(json);
-    if(json.success){
-      this.props.navigate('/login')
+    if(res.status === 400){
+       json.errors.forEach(element => {
+         message.error(element.msg);
+       });
+    }
+    else if(res.status === 401)
+    {
+      message.error('Invalid Credential')
+    }
+    else if(res.status === 500){
+      message.error("Internal server error");
     }
     else{
-      alert("Invalid crendential");
+      message.success("Login Successfull");
+      this.props.navigate('/about');
     }
+
   }
   render() {
     return (

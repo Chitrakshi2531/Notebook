@@ -1,18 +1,21 @@
 const mongoose = require('mongoose');
 
-const UserSchema = new mongoose.Schema({
-    name: {
+const NotesSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
+    title: {
         type: String,
         required: true
     },
-    email:{
+    description:{
         type: String,
         required: true,
-        unique: true
     },
-    password:{
+    tag:{
         type: String,
-        required: true
+        default: "General"
     },
     date:{
         type: Date,
@@ -20,4 +23,4 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('user',UserSchema);
+module.exports = mongoose.model('notes',NotesSchema);
