@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Form, Button, Input, message} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { WithRouter } from './Navigation';
+import { WithRouter } from './Router';
 
 class Login extends Component {
   
