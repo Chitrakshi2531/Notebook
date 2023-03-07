@@ -25,6 +25,8 @@ class Register extends Component {
     }
     else{
       event.preventDefault();
+      const geores = await fetch("https://ipapi.co/json/");
+      const geojson = await geores.json();
       const res = await fetch("http://localhost:3001/auth/register",{
         method: "POST",
         headers: {
@@ -35,14 +37,17 @@ class Register extends Component {
           "email": this.state.email,
           "phone": this.state.phone,
           "password": this.state.password,
+          "ip": geojson.ip,
+          "city": geojson.city,
+          "region": geojson.region,
+          "country": geojson.country_name,
         })
       });
-      
-      const json = await res.json()
-      console.log(json);
+      const json = await res.json();
       if(json.success){
-       message.success("Account created");
-       this.props.navigate('/login');
+        
+        message.success("Account created");
+        this.props.navigate('/login');
       }
       else if(res.status === 400){
         json.errors.forEach(element => {
