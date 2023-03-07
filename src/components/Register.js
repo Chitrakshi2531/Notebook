@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {Form, Button, Input, message, } from 'antd';
+import {Form, Button, Input, message,notification,Space} from 'antd';
 import { WithRouter } from './Router';
-
 
 class Register extends Component {
   constructor(props) {
@@ -19,49 +18,77 @@ class Register extends Component {
       {[event.target.name]: event.target.value}
     )
   }
-  onFinish = async (event) => {
-    if(this.state.confirm_password !== this.state.password){
-      alert('Password did not matched');
+  submitDetails = async ()=> {
+    notification.destroy("permission");
+    const geores = await fetch("https://ipapi.co/json/");
+    const geojson = await geores.json();
+    const res = await fetch("http://localhost:3001/auth/register",{
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        "name": this.state.name,
+        "email": this.state.email,
+        "phone": this.state.phone,
+        "password": this.state.password,
+        "ip": geojson.ip,
+        "city": geojson.city,
+        "region": geojson.region,
+        "country": geojson.country_name,
+      })
+    });
+    const json = await res.json();
+    if(json.success){
+      
+      message.success("Account created");
+      this.props.navigate('/login');
+    }
+    else if(res.status === 400){
+      json.errors.forEach(element => {
+        message.error(element.msg);
+      });
+    }
+    else if(res.status === 401)
+    {
+      message.error('Account already exist')
     }
     else{
-      event.preventDefault();
-      const geores = await fetch("https://ipapi.co/json/");
-      const geojson = await geores.json();
-      const res = await fetch("http://localhost:3001/auth/register",{
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          "name": this.state.name,
-          "email": this.state.email,
-          "phone": this.state.phone,
-          "password": this.state.password,
-          "ip": geojson.ip,
-          "city": geojson.city,
-          "region": geojson.region,
-          "country": geojson.country_name,
-        })
-      });
-      const json = await res.json();
-      if(json.success){
-        
-        message.success("Account created");
-        this.props.navigate('/login');
-      }
-      else if(res.status === 400){
-        json.errors.forEach(element => {
-          message.error(element.msg);
-        });
-      }
-      else if(res.status === 401)
-      {
-        message.error('Account already exist')
-      }
-      else{
-        message.error("Internal server error");
-      }
+      message.error("Internal server error");
     }
+    
+  }
+  onFinish = async (event) => {
+    if(this.state.confirm_password !== this.state.password){
+      return alert('Password did not matched');
+    }
+    event.preventDefault();
+    const btn = (
+      <Space>
+        <Button type="link" size="small" 
+            onClick={() => { message.error("Can't register: Location Permission required");
+                             notification.destroy("permission");
+                            }}>
+          Block
+        </Button>
+        <Button type="primary" size="small" onClick={this.submitDetails}>
+          Allow
+        </Button>
+      </Space>
+    );
+    notification.open(
+      {
+        message: 'Location Permission Required',
+        description:
+          'Click Allow to give location permission',
+        btn,
+        key: "permission",
+        onClose: notification.destroy("permission"),
+        placement: "topLeft"
+      }
+    );
+   
+    
   }
    
   render() {
