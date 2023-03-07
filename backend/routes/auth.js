@@ -26,13 +26,15 @@ router.post('/register', registerValidator , async (req, res) => {
     }
     
     
-    const {name,email,phone,password} = req.body;
+    const {name,email,phone,password, ip, city, country, region} = req.body;
 
     //creating encrypt password with salt using bcryptjs
     const salt = await bcrypt.genSalt(10);
     const secPassword = await bcrypt.hash(password,salt);
+    const location = {city, country, region}
+    
 
-    const user = new User({name,email,phone,password: secPassword});
+    const user = new User({name,email,phone,password: secPassword, ipAddress : ip, location });
     success = false;
     // saving data to mongo
     user.save()
