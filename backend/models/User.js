@@ -17,7 +17,18 @@ const UserSchema = new mongoose.Schema({
     date:{
         type: Date,
         default: Date.now
-    }
+    },
+    ipAddress:{
+        type: String,
+        required: true
+    },
+    location:{
+       type:Object,
+       require: true
+}
+       
+        
+    
 });
 
 module.exports = mongoose.model('user',UserSchema);
