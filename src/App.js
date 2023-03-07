@@ -11,7 +11,12 @@ import About from "./components/About";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register"
+import {connect} from 'react-redux';
 const { Header, Content, } = Layout;
+
+const mapStateToProps = (state) =>({
+  theme: state.theme,
+});
 
 class App extends Component{
   render(){
@@ -22,7 +27,7 @@ class App extends Component{
             <image src="/logo.png" alt="logo" />
             </div>
         <Header>
-            <Menu theme="dark" mode="horizontal" style={{display:'block'}}>
+            <Menu theme={this.props.theme} mode="horizontal" style={{display:'block'}}>
               <Menu.Item key="1" icon={<HomeOutlined />}>
               <Button type="link" href="/">
                 Home
@@ -40,7 +45,7 @@ class App extends Component{
             </Menu>
           </Header>
           
-          <Content style={{ padding: '0 500px' }}>
+          <Content style={{ padding: '0 50px' }}>
             <div className="site-layout-content">
               <Routes>
                 <Route exact path="/" element={<Home />} />
@@ -56,4 +61,4 @@ class App extends Component{
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);
