@@ -19,16 +19,15 @@ class Login extends Component {
     )
   }
   onFinish = async (event) => {
-    event.preventDefault();
+    //event.preventDefault();
     const res = await fetch("http://localhost:3001/auth/login",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({email: [this.state.email],password: [this.state.password]})
+      body: JSON.stringify({email: this.state.email,password: this.state.password})
     });
-    const json = await res.json()
-    console.log(json);
+    const json = await res.json();
     if(res.status === 400){
        json.errors.forEach(element => {
          message.error(element.msg);

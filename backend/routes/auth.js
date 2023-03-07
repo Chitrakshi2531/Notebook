@@ -48,7 +48,7 @@ router.post('/register', registerValidator , async (req, res) => {
             res.json({success , msg : "User added successfully",authToken});
         })
         .catch(err => {
-
+            console.log(err);
             // 11000 error for duplicate email
             if(err.code === 11000)
             {
@@ -76,6 +76,7 @@ router.post('/login', loginValidator , async (req, res) => {
     
     
     const {email,password} = req.body;
+    console.log(req.body);
     success = false;
     
     try{
@@ -102,7 +103,8 @@ router.post('/login', loginValidator , async (req, res) => {
         
     }
     catch(err){
-        res.status(500).json({success,err})
+        console.log(err);
+        res.status(500).json({success,err});
     }
     
 });
