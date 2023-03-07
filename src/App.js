@@ -18,29 +18,34 @@ class App extends Component{
     return (
       <Router>
         <Layout className="layout">
-          <div className="logo">
-            <image src="/logo.png" alt="logo" />
-            </div>
-        <Header>
+          <Header>
             <Menu theme="dark" mode="horizontal" style={{display:'block'}}>
-              <Menu.Item key="1" icon={<HomeOutlined />}>
-              <Button type="link" href="/">
-                Home
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="2" icon={<MenuOutlined />}>
-                <Button type="link" href="/about">About</Button>
-              </Menu.Item>
-              <Menu.Item key="3" icon={<UserOutlined />} style={{float:"right"}}>
-                <Button type="link" href="/login">Login</Button>
-              </Menu.Item>
-              <Menu.Item key="4" icon={<UserOutlined />}>
-                <Button type="link" href="/register">Register</Button>
-              </Menu.Item>
+              {
+                false ? 
+                <>
+                  <Menu.Item key="3" icon={<UserOutlined />} style={{float:"right"}}>
+                    <Button type="link" href="/home">Logout</Button>
+                  </Menu.Item>
+                  <Menu.Item key="1" icon={<HomeOutlined />}>
+                   <Button type="link" href="/">Home</Button>
+                  </Menu.Item>
+                  <Menu.Item key="2" icon={<MenuOutlined />}>
+                    <Button type="link" href="/about">About</Button>
+                  </Menu.Item>
+                </> :
+                <>
+                  <Menu.Item key="1" icon={<UserOutlined />} style={{float:"right"}}>
+                    <Button type="link" href="/login">Login</Button>
+                  </Menu.Item>
+                  <Menu.Item key="2" icon={<UserOutlined />} style={{float:"right"}}>
+                    <Button type="link" href="/register">Register</Button>
+                  </Menu.Item>
+                </>
+              }
             </Menu>
           </Header>
           
-          <Content style={{ padding: '0 500px' }}>
+          <Content style={{ padding: '0 50px' }}>
             <div className="site-layout-content">
               <Routes>
                 <Route exact path="/" element={<Home />} />
