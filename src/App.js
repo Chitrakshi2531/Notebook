@@ -3,7 +3,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { Layout } from 'antd';
+import { Layout, ConfigProvider } from 'antd';
 import React, { Component } from 'react';
 import './App.css';
 import About from "./components/About";
@@ -12,12 +12,24 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Navbar from "./components/Navbar";
 import Logout from "./components/Logout";
+import { connect } from 'react-redux';
 const { Content } = Layout;
+
+const mapStateToProps = (state) =>({
+  color: state.color.color,
+});
 
 class App extends Component{
   render(){
     return (
       <Router>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: this.props.color,
+            },
+          }}
+        >
         <Layout className="layout">
           <Navbar />
           <Content style={{ padding: '0 50px' }}>
@@ -30,9 +42,10 @@ class App extends Component{
               </Routes>
           </Content>
         </Layout>
+        </ConfigProvider>
       </Router>
     )
   }
 }
 
-export default App;
+export default connect(mapStateToProps)(App);

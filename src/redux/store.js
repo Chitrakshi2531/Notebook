@@ -4,6 +4,7 @@ import loginReducer from "./reducers/loginReducer";
 import themeReducer from "./reducers/themeReducer";
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import colorReducer from './reducers/colorReducer';
 
 const persistConfig = {
     key: "root",
@@ -13,7 +14,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
     login : loginReducer, 
-    theme : themeReducer
+    theme : themeReducer,
+    color : colorReducer,
 }) ;
 
 const reducer = persistReducer(persistConfig, rootReducer);
