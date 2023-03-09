@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {Form, Button, Input, message} from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { WithRouter } from './Router';
+import  {action}  from '../redux/action-creators/index';
+import store from '../redux/store';
 
 class Login extends Component {
   
@@ -41,6 +43,7 @@ class Login extends Component {
       message.error("Internal server error");
     }
     else{
+      store.dispatch(action.login());
       message.success("Login Successfull");
       this.props.navigate('/about');
     }
