@@ -20,7 +20,6 @@ class App extends Component{
       <Router>
         <Layout className="layout">
           <Navbar />
-          
           <Content style={{ padding: '0 50px' }}>
             <div className="site-layout-content">
               <Routes>
