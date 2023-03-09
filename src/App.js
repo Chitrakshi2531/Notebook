@@ -3,59 +3,46 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { Layout, Menu, Button} from 'antd';
-import {HomeOutlined, UserOutlined, MenuOutlined} from '@ant-design/icons';
+import { Layout, ConfigProvider } from 'antd';
 import React, { Component } from 'react';
 import './App.css';
 import About from "./components/About";
 import Home from "./components/Home";
 import Login from "./components/Login";
-import Register from "./components/Register"
-import {connect} from 'react-redux';
-const { Header, Content, } = Layout;
+import Register from "./components/Register";
+import Navbar from "./components/Navbar";
+import Logout from "./components/Logout";
+import { connect } from 'react-redux';
+const { Content } = Layout;
 
 const mapStateToProps = (state) =>({
-  theme: state.theme,
+  color: state.color.color,
 });
 
 class App extends Component{
   render(){
     return (
       <Router>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: this.props.color,
+            },
+          }}
+        >
         <Layout className="layout">
-          <div className="logo">
-            <image src="/logo.png" alt="logo" />
-            </div>
-        <Header>
-            <Menu theme={this.props.theme} mode="horizontal" style={{display:'block'}}>
-              <Menu.Item key="1" icon={<HomeOutlined />}>
-              <Button type="link" href="/">
-                Home
-                </Button>
-              </Menu.Item>
-              <Menu.Item key="2" icon={<MenuOutlined />}>
-                <Button type="link" href="/about">About</Button>
-              </Menu.Item>
-              <Menu.Item key="3" icon={<UserOutlined />} style={{float:"right"}}>
-                <Button type="link" href="/login">Login</Button>
-              </Menu.Item>
-              <Menu.Item key="4" icon={<UserOutlined />}>
-                <Button type="link" href="/register">Register</Button>
-              </Menu.Item>
-            </Menu>
-          </Header>
-          
+          <Navbar />
           <Content style={{ padding: '0 50px' }}>
-            <div className="site-layout-content">
               <Routes>
-                <Route exact path="/" element={<Home />} />
+                <Route exact path="/home" element={<Home />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/about" element={<About />} />
                 <Route exact path="/register" element={<Register />} />
+                <Route exact path="/logout" element={<Logout />} />
               </Routes>
-            </div>
           </Content>
         </Layout>
+        </ConfigProvider>
       </Router>
     )
   }
