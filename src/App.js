@@ -3,7 +3,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import { Layout} from 'antd';
+import { Layout } from 'antd';
 import React, { Component } from 'react';
 import './App.css';
 import About from "./components/About";
@@ -21,15 +21,13 @@ class App extends Component{
         <Layout className="layout">
           <Navbar />
           <Content style={{ padding: '0 50px' }}>
-            <div className="site-layout-content">
               <Routes>
-                <Route exact path="/" element={<Home />} />
+                <Route exact path="/home" element={<Home />} />
                 <Route exact path="/login" element={<Login />} />
                 <Route exact path="/about" element={<About />} />
                 <Route exact path="/register" element={<Register />} />
                 <Route exact path="/logout" element={<Logout />} />
               </Routes>
-            </div>
           </Content>
         </Layout>
       </Router>

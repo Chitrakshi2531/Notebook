@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
-import { Layout, Menu} from 'antd';
+import {Menu,Layout} from 'antd';
 import {HomeOutlined, UserOutlined, MenuOutlined} from '@ant-design/icons';
 import {connect} from 'react-redux';
-const { Header } = Layout;
+const {Header} = Layout;
 
 
 const mapStateToProps = (state) =>({
@@ -14,8 +14,9 @@ const mapStateToProps = (state) =>({
 class Navbar extends Component {
   render() {
     return (
-        <Header >
-        <Menu theme ={this.props.theme}  mode="horizontal" style={{display:'block'}}>
+      <Header className="header" style={{padding: 0}}>
+      <div className="logo" />
+        <Menu theme ={this.props.theme}  mode="horizontal" style={{display:'block',paddingRight: 30,paddingLeft: 30}}>
           {
             this.props.login ? 
             <>
@@ -38,9 +39,8 @@ class Navbar extends Component {
               </Menu.Item>
             </>
           }
-          
         </Menu>
-      </Header> 
+        </Header>
     );
   }
 }

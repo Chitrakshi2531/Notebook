@@ -19,10 +19,11 @@ class Register extends Component {
     )
   }
   submitDetails = async ()=> {
-    notification.destroy("permission");
-    const geores = await fetch("https://ipapi.co/json/");
-    const geojson = await geores.json();
-    const res = await fetch("http://localhost:3001/auth/register",{
+    try{
+      notification.destroy("permission");
+      const geores = await fetch("https://ipapi.co/json/");
+      const geojson = await geores.json();
+      const res = await fetch("http://localhost:3001/auth/register",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
@@ -37,24 +38,27 @@ class Register extends Component {
         "region": geojson.region,
         "country": geojson.country_name,
       })
-    });
-    const json = await res.json();
-    if(json.success){
-      
-      message.success("Account created");
-      this.props.navigate('/login');
-    }
-    else if(res.status === 400){
-      json.errors.forEach(element => {
-        message.error(element.msg);
       });
-    }
-    else if(res.status === 401)
-    {
-      message.error('Account already exist')
-    }
-    else{
-      message.error("Internal server error");
+      const json = await res.json();
+      if(json.success){
+        
+        message.success("Account created");
+        this.props.navigate('/login');
+      }
+      else if(res.status === 400){
+        json.errors.forEach(element => {
+          message.error(element.msg);
+        });
+      }
+      else if(res.status === 401)
+      {
+        message.error('Account already exist')
+      }
+      else{
+        message.error("Internal server error");
+      }
+    }catch(e){
+      message.error("Some Error Occured");
     }
     
   }

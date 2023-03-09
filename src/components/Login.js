@@ -21,33 +21,36 @@ class Login extends Component {
     )
   }
   onFinish = async (event) => {
-    //event.preventDefault();
-    const res = await fetch("http://localhost:3001/auth/login",{
+    try{
+      const res = await fetch("http://localhost:3001/auth/login",{
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({email: this.state.email,password: this.state.password})
-    });
-    const json = await res.json();
-    if(res.status === 400){
-       json.errors.forEach(element => {
-         message.error(element.msg);
-       });
+      });
+      const json = await res.json();
+      if(json.success){
+        store.dispatch(action.login());
+        message.success("Login Successfull");
+        this.props.navigate('/home');
+      }
+      else if(res.status === 400){
+        json.errors.forEach(element => {
+          message.error(element.msg);
+        });
+      }
+      else if(res.status === 401)
+      {
+        message.error('Invalid Credential')
+      }
+      else {
+        message.error("Internal server error");
+      }
     }
-    else if(res.status === 401)
-    {
-      message.error('Invalid Credential')
+    catch(e){
+      message.error("Some Error Occured");
     }
-    else if(res.status === 500){
-      message.error("Internal server error");
-    }
-    else{
-      store.dispatch(action.login());
-      message.success("Login Successfull");
-      this.props.navigate('/about');
-    }
-
   }
   render() {
     return (
