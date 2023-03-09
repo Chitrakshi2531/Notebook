@@ -78,19 +78,18 @@ router.post('/login', loginValidator , async (req, res) => {
     
     
     const {email,password} = req.body;
-    console.log(req.body);
     success = false;
     
     try{
         const user = await User.findOne({email});
         if(!user){
-            res.status(401).json({success,msg: "Invalid Credential"});
+            return res.status(401).json({success,msg: "Invalid email"});
         }
         //checking password using bcryptjs
         const passCompare = await bcrypt.compare(password,user.password); 
             
         if(!passCompare){
-            res.status(401).json({success,msg: "Invalid Credential"});
+            return res.status(401).json({success,msg: "Invalid Credential"});
         }
 
         const data ={
@@ -98,7 +97,7 @@ router.post('/login', loginValidator , async (req, res) => {
                 id : user.id,
             }
         }
-        const authToken = jwt.sign(data,JWT_code);
+        const authToken = await jwt.sign(data,JWT_code);
         success=true;
         
         res.json({success,authToken});
