@@ -99,7 +99,8 @@ router.post('/login', loginValidator , async (req, res) => {
         }
         const authToken = await jwt.sign(data,JWT_code);
         success=true;
-        
+        res.cookie('token',authToken,{httpOnly: false});
+        console.log(res.cookies);
         res.json({success,authToken});
         
     }
@@ -110,8 +111,8 @@ router.post('/login', loginValidator , async (req, res) => {
     
 });
 
-// ROUTE 3: Get loggedin User Details using: POST "/auth/getuser". Login required
-router.post('/getuser', fetchuser, async (req, res)=> {
+// ROUTE 3: Get loggedin User Details using: GET "/auth/getuser". Login required
+router.get('/getuser', fetchuser, async (req, res)=> {
     try {
         userId = req.user.id;
         const user = await User.findById (userId).select("-password");

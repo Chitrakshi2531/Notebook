@@ -24,8 +24,12 @@ class Login extends Component {
     try{
       const res = await fetch("http://localhost:3001/auth/login",{
       method: "POST",
+      withCredentials: true,
+      credentials: "same-origin",
+      mode:'same-origin',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Set-Cookie': 'id=1234'
       },
       body: JSON.stringify({email: this.state.email,password: this.state.password})
       });
