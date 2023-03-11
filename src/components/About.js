@@ -5,7 +5,6 @@ import  {action}  from '../redux/action-creators/index';
 import store from '../redux/store';
 import { Radio, Switch } from 'antd';
 
-
 class About extends Component {
   handleThemeChange = (checked) =>{
     const theme = checked ? 'dark' : 'light';
@@ -20,13 +19,13 @@ class About extends Component {
           <h2>About</h2>
             <div>
               <h3>Theme -
-              <Switch
-              checked={this.props.theme === 'dark'}
-              onChange={this.handleThemeChange}
-            />
-            {this.props.theme === 'dark' ? 'Dark' : 'Light'} 
+                <Switch
+                checked={this.props.theme === 'dark'}
+                onChange={this.handleThemeChange}
+                style={{margin: 10}}
+                />
+              Dark
               </h3>
-              
             </div>
             <div>
             <Radio.Group defaultValue="blue" buttonStyle="solid">
