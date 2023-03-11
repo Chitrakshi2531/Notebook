@@ -5,16 +5,18 @@ const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const port = 3001;
+const cookieParser = require('cookie-parser');
 
 connectToMongo();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
+cors.SupportsCredentials = true;
 app.use(express.urlencoded({
 extended:true
 }));
-
+app.use(cookieParser());
 app.use('/auth',require('./routes/auth'));
 app.use('/notes',require('./routes/notes'));
 

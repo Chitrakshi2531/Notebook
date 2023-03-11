@@ -4,6 +4,7 @@ import  {connect}  from 'react-redux';
 import  {action}  from '../redux/action-creators/index';
 import store from '../redux/store';
 import { Radio, Switch } from 'antd';
+import { WithRouter } from './Router';
 
 class About extends Component {
   handleThemeChange = (checked) =>{
@@ -13,6 +14,26 @@ class About extends Component {
   handleColorChange = (event) =>{
     store.dispatch(action.changeColor(event.target.value));
   };
+  getuserdetails = async () =>{
+    try{
+      const res = await fetch("http://localhost:3001/auth/getuser",{
+        method: "GET",
+        withCredentials: true,
+        credentials: "same-origin",
+        });
+        const json = await res.json(); 
+        if(! (res.status === 200)){
+          const error = new Error(res.error);
+          throw error;
+        }   
+    }catch(e){
+      console.log(e);
+      this.props.navigate("/login");
+    }
+  }
+  async componentDidMount(){
+    await this.getuserdetails();
+  }
   render() {
     return (
         <div>
@@ -55,4 +76,4 @@ const mapStateToProps = (state) =>({
   color: state.color.color,
 });
 
-export default connect(mapStateToProps)(About);
+export default connect(mapStateToProps)(WithRouter(About));

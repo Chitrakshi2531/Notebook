@@ -4,9 +4,11 @@ const JWT_SECRET = 'code';
 
 const fetchuser = (req, res, next)=>{
     // Get the user from the jwt token and add id to req object
-    const token = req.header('auth-token');
+    console.log(req.cookies.token);
+    const token = req.cookies.token;
     if(!token) {
-        res.status(401).send({error: "Please authenticate using a valid token"})
+        console.log("no token");
+        return res.status(401).send({error: "Please authenticate using a token"})
     }
     try{
         const data = jwt.verify (token, JWT_SECRET);
@@ -14,7 +16,8 @@ const fetchuser = (req, res, next)=>{
         next(); 
     }
     catch(err){
-        res.status(401).send({error: "Please authenticate using a valid token"})
+        console.log("not valid token");
+       return res.status(401).send({error: "Please authenticate using a valid token"})
     }
 }
 
