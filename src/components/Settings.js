@@ -5,8 +5,9 @@ import  {action}  from '../redux/action-creators/index';
 import store from '../redux/store';
 import { Radio, Switch } from 'antd';
 import { WithRouter } from './Router';
+import { Navigate } from "react-router-dom";
 
-class About extends Component {
+class Settings extends Component {
   handleThemeChange = (checked) =>{
     const theme = checked ? 'dark' : 'light';
     store.dispatch(action.changeTheme(theme));
@@ -14,30 +15,13 @@ class About extends Component {
   handleColorChange = (event) =>{
     store.dispatch(action.changeColor(event.target.value));
   };
-  getuserdetails = async () =>{
-    try{
-      const res = await fetch("http://localhost:3001/auth/getuser",{
-        method: "GET",
-        withCredentials: true,
-        credentials: "same-origin",
-        });
-        const json = await res.json(); 
-        if(! (res.status === 200)){
-          const error = new Error(res.error);
-          throw error;
-        }   
-    }catch(e){
-      console.log(e);
-      this.props.navigate("/login");
-    }
-  }
-  async componentDidMount(){
-    await this.getuserdetails();
-  }
   render() {
+    if (this.props.login === false) {
+      return <Navigate to="/login" />;
+    }
     return (
         <div>
-          <h2>About</h2>
+          <h2>Settings</h2>
             <div>
               <h3>Theme -
                 <Switch
@@ -74,6 +58,7 @@ class About extends Component {
 const mapStateToProps = (state) =>({
   theme: state.theme.theme,
   color: state.color.color,
+  login: state.login.login,
 });
 
-export default connect(mapStateToProps)(WithRouter(About));
+export default connect(mapStateToProps)(WithRouter(Settings));

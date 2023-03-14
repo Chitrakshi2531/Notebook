@@ -4,11 +4,10 @@ import  {action}  from '../redux/action-creators/index';
 import store from '../redux/store';
 
 class Logout extends Component {
-componentDidMount(){
+
+  render() {
     store.dispatch(action.logout());
     this.props.navigate('/login');
-}
-  render() {
     return (
       <div>
         

@@ -6,13 +6,14 @@ import {
 import { Layout, ConfigProvider } from 'antd';
 import React, { Component } from 'react';
 import './App.css';
-import About from "./components/About";
+import Settings from "./components/Settings";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Navbar from "./components/Navbar";
 import Logout from "./components/Logout";
 import { connect } from 'react-redux';
+import history from "./history";
 const { Content } = Layout;
 
 const mapStateToProps = (state) =>({
@@ -22,7 +23,7 @@ const mapStateToProps = (state) =>({
 class App extends Component{
   render(){
     return (
-      <Router>
+      <Router histort={history}>
         <ConfigProvider
           theme={{
             token: {
@@ -36,7 +37,7 @@ class App extends Component{
               <Routes>
                 <Route exact path="/home" element={<Home />} />
                 <Route exact path="/login" element={<Login />} />
-                <Route exact path="/about" element={<About />} />
+                <Route exact path="/settings" element={<Settings />} />
                 <Route exact path="/register" element={<Register />} />
                 <Route exact path="/logout" element={<Logout />} />
               </Routes>

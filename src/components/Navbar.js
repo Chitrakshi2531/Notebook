@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 import {Menu,Layout} from 'antd';
-import {HomeOutlined, UserOutlined, MenuOutlined} from '@ant-design/icons';
+import {HomeOutlined, UserOutlined, SettingOutlined} from '@ant-design/icons';
 import {connect} from 'react-redux';
 const {Header} = Layout;
 
@@ -23,8 +23,8 @@ class Navbar extends Component {
               <Menu.Item key="1" icon={<HomeOutlined />}>
                 <Link to="/home">Home</Link>
               </Menu.Item>
-              <Menu.Item key="2" icon={<MenuOutlined />}>
-                <Link to="/about">About</Link>
+              <Menu.Item key="2" icon={<SettingOutlined />}>
+                <Link to="/settings">Settings</Link>
               </Menu.Item>
               <Menu.Item key="3" icon={<UserOutlined />} style={{float:"right"}}>
                 <Link to="/logout">Logout</Link>

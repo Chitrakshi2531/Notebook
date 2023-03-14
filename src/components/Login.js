@@ -26,7 +26,6 @@ class Login extends Component {
       method: "POST",
       withCredentials: true,
       credentials: "same-origin",
-      mode:'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'Set-Cookie': 'id=1234'

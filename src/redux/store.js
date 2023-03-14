@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore} from '@reduxjs/toolkit';
 import { combineReducers } from "redux"; 
 import loginReducer from "./reducers/loginReducer";
 import themeReducer from "./reducers/themeReducer";
@@ -22,6 +22,7 @@ const reducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
     reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({serializableCheck: false,}),
 });
 
 export default store;

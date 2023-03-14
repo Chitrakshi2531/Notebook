@@ -5,11 +5,6 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchuser');
-const session = require('express-session');
-
-const app = express();
-const store = require('../db');
-const cookieParser = require('cookie-parser');
 
 const JWT_code = 'code';
 
@@ -40,7 +35,7 @@ router.post('/register', registerValidator , async (req, res) => {
     const location = {city, country, region}
     
 
-    const user = new User({name,email,phone,password: secPassword, ipAddress : ip, location });
+    const user = new User({name,email,phone,password: secPassword, ipAddress : ip, location,sessions:[] });
     success = false;
     // saving data to mongo
     user.save()
@@ -108,19 +103,32 @@ router.post('/login' ,async (req, res) => {
         const authToken = await jwt.sign(data,JWT_code);
         //Creating a seesion
         
-       
         success=true;
-        req.session.user = user;
-        req.session.authToken = authToken;
-        req.session.isAuth = true;
-        console.log(req.session);
-        console.log(req.session.id);
-       
-       
+        const geores = await fetch("https://ipapi.co/json/");
+        const geojson = await geores.json();
+        const location = {city: geojson.city, country: geojson.country_name, region: geojson.region}
+        if(user.loginSessions.length > 2){
+            user.loginSessions = [];
+            await user.save();
+        }
+        const loginDetails = {
+            ipAddress: geojson.ip,
+            token: authToken,location,
+            location,
+        }
+        try{
+            user.loginSessions.unshift(loginDetails);
+            await user.save();
+        }
+        catch(err){
+            console.log(err);
+        }
         
+        res.cookie("token" , authToken,{
+            maxAge: 3600*1000, /* one hour */
+            httpOnly: true
+        });
         
-        res.cookie('token',authToken,{httpOnly: false});
-        console.log(res.cookies);
         res.json({success,authToken});
         
     }
@@ -132,7 +140,7 @@ router.post('/login' ,async (req, res) => {
 });
 
 // ROUTE 3: Get loggedin User Details using: POST "/auth/getuser". Login required
-router.post('/getuser', fetchuser, async (req, res)=> {
+router.get('/getuser', fetchuser, async (req, res)=> {
     try {
         userId = req.user.id;
         const user = await User.findById (userId).select("-password");
